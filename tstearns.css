@@ -4,3 +4,5 @@ div.content{margin:40px auto;max-width:800pt;line-height:1.4;color:#222;padding:
 h1,h2{line-height:1.2;color:#036}
 h3{line-height:1.1;color:#063}
 a{color:#802}
+pre{background-color:#f6f8fa;border-radius:3px;padding:12px}
+code{background-color:#f6f8fa;border-radius:3px;padding:0.1em 0.3em}
