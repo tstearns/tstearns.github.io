@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset=utf-8>
+		<meta name=viewport content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/tstearns.css" type="text/css">
+		<link rel="alternate" href="/notes/atom.xml" type="application/atom+xml" title="tstearns.com notes">
+		<title>tstearns.com</title>
+	</head>
+	<body>
+		<div class="header">
+			<h2><a href="/">tstearns.com</a><a id="notes">/notes</a></h2>
+		</div>
+		<div class="content">
+		<h1>Where Does My Data Go?</h1>
+		<h3>January 2018</h3>
+		<p>Where <em>does</em> my data go when making requests across the Internet? That is a difficult but often-asked question.</p>
+		<p>One approach to visualizing geographic packet paths made its way onto Hacker News recently: <a href="https://stefansundin.github.io/traceroute-mapper/">https://stefansundin.github.io/traceroute-mapper/</a>. It is disappointingly inaccurate. Let's look at the example traceroute output given by the above website, which allegedly travels from Sweden through Switzerland:</p>
+		<pre><samp> 7  se-lla.nordu.net (109.105.102.93)  0.574 ms
+ 8  se-fre.nordu.net (109.105.97.113)  13.105 ms
+ 9  s-b3-link.telia.net (213.248.97.17)  16.265 ms
+10  s-bb4-link.telia.net (80.91.253.226)  13.546 ms
+11  kbn-bb3-link.telia.net (62.115.139.167)  22.249 ms
+12  nyk-bb1-link.telia.net (62.115.141.99)  115.487 ms
+13  ash-bb4-link.telia.net (213.155.133.9)  126.166 ms
+14  las-b3-link.telia.net (213.155.137.59)  194.745 ms</samp></pre>
+<h2>Getting Started</h2>
+		<p>In order to determine where the data actually goes, we need to examine three properties:</p>
+		<ol>
+			<li>The network that carries the traffic.</li>
+			<li>The routers within that network that reveal points along the path of the data.</li>
+			<li>The undersea cables and underground fiber that connect the routers.</li>
+		</ol>
+		<p>With some human intuition, #1 and #2 are not too difficult to interpret in the above traceroute. <a href="https://en.wikipedia.org/wiki/NORDUnet">NORDUnet</a> takes the traffic from <code>lla</code> (Luleå) to <code>fre</code> (Stockholm) and hands it off to <a href="https://en.wikipedia.org/wiki/Telia_Carrier">Telia</a>, which takes the traffic through <code>kbn</code> (København, aka Copenhagen), then crosses into the USA through <code>nyk</code> (New York City), <code>ash</code> (Ashburn Virginia), and finally <code>las</code> (Los Angeles). Here's a plot using Karl Swartz's <a href="http://www.gcmap.com/">Great Circle Mapper</a>, which is a handy tool for all manner of global plotting (though note that the black lines connecting the cities are rough estimates, as we don't really know which cable and fiber routes were used):</p>
+		<div class="figure"><a href="http://www.gcmap.com/mapui?P=LLA-ARN-CPH-NYC-IAD-LAX"><img alt="Path from gcmap.com" src="tracemap.gif"></a></div>
+		<p>An astute reader might question how these associations are made. Some are obvious, such as <code>lla</code>, which is the IATA airport code for Luleå (using airport codes is a common pattern for router names). But others are not so clear. For example:</p>
+		<ol>
+			<li>How do we know that <code>fre</code> is in Stockholm? Perhaps it refers to the <a href="https://en.wikipedia.org/wiki/Frescati_(Stockholm)">Frescati</a> neighborhood where Stockholm University is located, but that's just a guess.</li>
+			<li>Why does Telia use <code>las</code> for Los Angeles, which not only does not seem like an obvious abbreviation, but is the airport code for nearby Las Vegas? I have no idea.</li>
+		</ol>
+		<p>But I do know that <a href="http://stats.nordu.net/looking-glass/lg.cgi">NORDUnet looking glass</a> and <a href="http://lg.telia.net/">Telia looking glass</a> claim that <code>fre</code> is Stockholm and <code>las</code> is Los Angeles.</p>
+<h2>Geolocation Strategies</h2>
+		<p>Using looking glass servers is not a practical solution for automated discovery of geolocation. So let's dig a little deeper into the ways we can trace the geography of our network traffic:</p>
+		<ol>
+			<li>Reading router names as described above is easy. But as mentioned, it requires human intuition, and doesn't work when network operators don't tag their routers with geographic labels. For more background on interpreting traceroutes, see Richard Steenberger's <a href="https://www.nanog.org/sites/default/files/tuesday_steenbergen_troublshootingtraceroute_62.49.pdf">NANOG 62 presentation</a>.</li>
+			<li>Measuring ping latencies to triangulate a router's location may be possible. But latency is determined by many factors, and can rarely give precise results, as shown in <a href="https://github.com/britram/trilateration/blob/master/paper.ipynb">a recent research paper</a>.</li>
+			<li>Alternately, IP addresses can simply be looked up in public registries (for example, <a href="https://en.wikipedia.org/wiki/Regional_Internet_registry">Regional Internet Registries</a> or <a href="https://en.wikipedia.org/wiki/Border_Gateway_Protocol">BGP</a> route servers). This is tempting to automate, but very error-prone, as registries typically list the location of the organization that registers the address, rather than the location of the network equipment. It appears to be the method used by the Hacker News article. The idea is simple: Telia is a European company, or more precisely, the IP addresses used in that particular route are registered via Europe's <a href="https://en.wikipedia.org/wiki/RIPE_NCC">RIPE</a> registry. One could argue that Switzerland is roughly the geographic center of Europe, so Switzerland is used as a placeholder for <em>all</em> of Telia's traffic, even traffic in the USA, simply because the routers belong to a network registered in Europe.</li>
+		</ol>
+		<h2>Imperfect Registries</h2>
+		<p>Despite being the least accurate of the above three methods for geographic purposes, public registry information still can be useful for understanding network ownership and relationships. Hurricane Electric (HE), a large global network operator, runs <a href="https://bgp.he.net/">bgp.he.net</a>, a very useful tool for looking up network information using HE's BGP tables. For more automated tooling, the <a href="https://pwhois.org/lft/">Prefix Whois Project</a> runs a WHOIS server that returns information about IP addresses given its BGP tables. Just be careful to know the limits of those databases when using them, particularly with respect to geolocation data.</p>
+		<p>Unfortunately, misinterpretation of geographic granularity can lead to unintended consequences. Another popular IP geolocation service, MaxMind, uses the center of the USA to represent locations belonging to American carriers that it can't identifty, and the center is in Kansas (in other words, Kansas is America's Switzerland, but without the Alps). The unlucky Kansas residents of the latitude/longitude given by MaxMind as a placeholder for the USA received so many threats from misguided vigilantes that they <a href="https://www.washingtonpost.com/news/morning-mix/wp/2016/08/10/lawsuit-how-a-quiet-kansas-home-wound-up-with-600-million-ip-addresses-and-a-world-of-trouble/">sued MaxMind in 2016</a>, and MaxMind subsequently moved their lat/long pair to a nearby lake.</p>
+		<h2>Invisible Hops</h2>
+		<p>All of the above discussion assumes knowledge of the IP addresses of routers that carry our traffic. Venerable <code>traceroute</code> is the most commonly used tool to gather these addresses, but it can only show routes in one direction: from source to destination. Packets run in a circuit, so the response from destination back to source is also relevant. The only way to determine that reverse path is to use a looking glass server. The NANOG presentation linked above has more notes on reverse path difficulties.</p>
+		<p>To take that difficulty a step further, sometimes both forward and reverse path IP addresses are hidden because of a technology called <a href="https://en.wikipedia.org/wiki/Multiprotocol_Label_Switching">Multiprotocol Label Switching</a> (MPLS), which many carriers use for long-haul traffic. It <a href="http://movingpackets.net/2017/10/06/misinterpreting-traceroute/">severely complicates traceroute interpretations</a>.</p>
+		<h2>Unstable Routes</h2>
+		<p>Modern traffic-routing techniques introduce ambiguity into geolocation analysis. For example, "<a href="https://en.wikipedia.org/wiki/Virtual_IP_address">virtual IPs</a>" are assigned to different machines at different times. Even more elusive are <a href="https://en.wikipedia.org/wiki/Anycast">Anycast</a> IPs that simultaneously belong to multiple machines in multiple locations. The use of Anycast has risen as CDNs such as Cloudflare become more popular, and large websites such as Google run their own Anycast networks, so that IP addresses can no longer be thought of as the addresses of machines, but instead as abstract identifiers that indicate which global network our traffic should be delivered to.</p>
+		<p>Routes can change even without Anycast. Network operators make and break relationships between one another, and occassionally misconfigure their routers, causing traffic to take different paths at different times. In extreme cases, <a href="https://en.wikipedia.org/wiki/BGP_hijacking">BGP hijacking</a> (either accidental or malicious) can cause highly suboptimal routes to be chosen, like recent incidents that sent <a href="https://arstechnica.com/information-technology/2017/12/suspicious-event-routes-traffic-for-big-name-sites-through-russia/">US and EU-bound traffic through Russia first</a>. In other words: running traceroute today won't reveal where our traffic will travel tomorrow.</p>
+		<h2>Conclusion</h2>
+		<p>Finally, even if we are certain about the location of the routers used to send and receive our data, we haven't addressed the question of which cables are used to carry the data between routers. For undersea routes, TeleGeography maintains a <a href="https://www.submarinecablemap.com/">Submarine Cable Map</a>, and for terrestrial fiber routes, individual carriers often provide maps of their own circuits ... but making use of that information requires a lot of manual sleuthing.</p>
+		<p>Understanding the geographic path that data takes is fraught with peril. The above techniques are usually sufficient to give a rough sense of where the packets flow, but more important than knowing how to use those techniques is knowing when and how they may deceive us. Happy tracerouting!</p>
+		</div>
+	</body>
+</html>

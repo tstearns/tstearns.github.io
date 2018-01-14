@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+<title>tstearns.com notes</title>
+<link href="https://tstearns.com/notes/atom.xml" rel="self" />
+<link href="https://tstearns.com/" />
+<id>tag:tstearns.com,2018:/notes/atom.xml</id>
+<updated>2018-01-14T16:17:33Z</updated>
+
+<entry>
+	<title>Where Does My Data Go?</title>
+	<author><name>Taylor Stearns</name></author>
+	<link href="https://tstearns.com/notes/2018/where-does-my-data-go.html"/>
+	<id>tag:tstearns.com,2018-01:/notes/2018/where-does-my-data-go.html</id>
+	<updated>2018-01-14T16:17:33Z</updated>
+	<summary type="xhtml">
+		<div xmlns="http://www.w3.org/1999/xhtml">
+			Where <em>does</em> my data go when making requests across the Internet? That is a difficult but often-asked question.
+		</div>
+	</summary>
+</entry>
+
+</feed>

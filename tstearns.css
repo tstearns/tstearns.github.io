@@ -1,7 +1,9 @@
 body{background-color:#fff;font-family:Georgia, serif}
 div.header{padding:0 10px}
 div.content{margin:40px auto;max-width:800pt;line-height:1.4;color:#222;padding:0 10px}
+div.figure{text-align:center}
 h1,h2{line-height:1.2;color:#036}
+.content h1{text-decoration:underline}
 h3{line-height:1.1;color:#063}
 a{color:#802}
 pre{background-color:#f6f8fa;border-radius:3px;padding:12px}
