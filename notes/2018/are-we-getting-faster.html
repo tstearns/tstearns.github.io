@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset=utf-8>
+		<meta name=viewport content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/tstearns.css" type="text/css">
+		<link rel="alternate" href="/notes/atom.xml" type="application/atom+xml" title="tstearns.com notes">
+		<title>tstearns.com</title>
+	</head>
+	<body>
+		<div class="header">
+			<h2><a href="/">tstearns.com</a><a id="notes">/notes</a></h2>
+		</div>
+		<div class="content">
+		<h1>Are We Getting Faster?</h1>
+		<h3>September 2018</h3>
+			<p>I was reading an article the other day in which the author asserted: <em>"current network (Internet) latencies are here to stay, because they are already within a fairly small factor of what is possible under known physics."</em> This conclusion came about after the author measured latency between a home network in Seattle Washington and the MIT network near Boston Massachusetts.</p>
+			<p>I suspect most of us are more interested in whether diverse Internet latencies are able to be improved in various places around the world, not just for those people who live in Seattle and visit websites in Boston. So I thought I'd try to break down where such latencies can be reduced.</p>
+		<h2>Cities</h2>
+			<p>Boston and Seattle are two wealthy, tech-heavy cities that are connected across the Northern US through a fairly straight line of other cities. But what about any route that is not so simple? Plenty of cities around the world (and even within the US) don't have efficient paths to Seattle. One way to visualize this is Hurricane Electric's <a href="https://he.net/layer2/">layer-2 map</a> which gives a force-directed graph of their PoPs and the connections between them. It's not difficult to find cities that require circuitous routes to each other. As new fiber connects those cities, routes improve.</p>
+			<p>Even cities that have fiber between them may not have network operators that peer with each other in those cities, which reduces the chances that your data will find a direct path. Earlier this year, Netflix, one of the Internet's largest content providers, lobbied the US government in support of <a href="https://mailman.nanog.org/pipermail/nanog/2018-January/094014.html">a bill to send more funding</a> to regional Internet Exchange Points, as those IXPs help to connect more networks in more places.
+		<h2>Countries</h2>
+			<p>The opportunities expand when crossing oceans, as the much more limited routes of undersea cables constrain you. When I visit websites in the US from the UK, I can be pretty sure that my traffic goes straight over the pond. But if you live anywhere else, your traffic has to go to a cable landing station that might be <em>a continent away</em>. For example, many African countries connect to the world through Europe. To see the global web of cables, you can peruse <a href="https://www.submarinecablemap.com/">Telegeography's map</a>, which is improving every year as new cable-laying projects complete. A notable example is last year's construction of <a href="https://www.nynog.org/blog/seaborn-networks-connects-brazil-and-the-u-s">SEABRAS-1</a>, the first direct connection between New York and São Paulo.</p>
+		<h2>Networks</h2>
+			<p>Software can improve as well. As device manufacturers adopt <a href="https://en.wikipedia.org/wiki/CoDel">congestion control techniques</a>, we can reduce tail latencies from problems like <a href="https://www.bufferbloat.net/">buffer bloat</a>, even though geography constrains the minimum latency between hosts. This brings down the total latency seen across all requests in a web page load, for example, even when a tool like ping only shows lower values in a controlled environment.</p>
+			<p>Perhaps most importantly, advances in networking and distributed computing mean we can put ourselves closer to where our packets need to go. This is why CDNs were invented. What if the content being provided by MIT could have been served from San Jose? Or even from Seattle? That would cut down latency more than any physical infrastructure could. Cloudflare has a number of success stories from putting this into practice, for example <a href="https://blog.cloudflare.com/mcallen/#seconddatacenterintexasfirstontheborderwithmexico">this map of Mexico</a>.</p>
+		<h2>Takeaway</h2>
+			<p>There are countless ways that we can reduce the effective latency that Internet users see every day. As cities, countries, and network operators invest in more infrastructure and more sophisticated traffic delivery techniques, we can expect to see real improvements around the world.</p>
+		</div>
+	</body>
+</html>

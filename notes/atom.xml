@@ -5,7 +5,21 @@
 <link href="https://tstearns.com/notes/atom.xml" rel="self" />
 <link href="https://tstearns.com/" />
 <id>tag:tstearns.com,2018:/notes/atom.xml</id>
-<updated>2018-01-14T16:17:33Z</updated>
+<updated>2018-09-04T20:18:32Z</updated>
+
+<entry>
+	<title>Are We Getting Faster?</title>
+	<author><name>Taylor Stearns</name></author>
+	<link href="https://tstearns.com/notes/2018/are-we-getting-faster.html"/>
+	<id>tag:tstearns.com,2018-09:/notes/2018/are-we-getting-faster.html</id>
+	<updated>2018-09-04T20:18:32Z</updated>
+	<summary type="xhtml">
+		<div xmlns="http://www.w3.org/1999/xhtml">
+			<p>I was reading an article the other day in which the author asserted: <em>"current network (Internet) latencies are here to stay, because they are already within a fairly small factor of what is possible under known physics."</em> This conclusion came about after the author measured latency between a home network in Seattle Washington and the MIT network near Boston Massachusetts.</p>
+			<p>I suspect most of us are more interested in whether diverse Internet latencies are able to be improved in various places around the world, not just for those people who live in Seattle and visit websites in Boston. So I thought I'd try to break down where such latencies can be reduced...</p>
+		</div>
+	</summary>
+</entry>
 
 <entry>
 	<title>Where Does My Data Go?</title>
@@ -15,7 +29,7 @@
 	<updated>2018-01-14T16:17:33Z</updated>
 	<summary type="xhtml">
 		<div xmlns="http://www.w3.org/1999/xhtml">
-			Where <em>does</em> my data go when making requests across the Internet? That is a difficult but often-asked question.
+			Where <em>does</em> my data go when making requests across the Internet? That is a difficult but often-asked question...
 		</div>
 	</summary>
 </entry>
